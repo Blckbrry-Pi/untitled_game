@@ -1,0 +1,1 @@
+{"attractors":[{"pos":{"x":0,"y":0},"field_size":150,"phys_size":50,"rot_offset":0,"spin_mult":1}],"zippers":[{"line":{"start_point":{"x":-900,"y":-75},"end_point":{"x":-200,"y":-75}},"width":100,"strength":1,"leading_dist":100},{"line":{"start_point":{"x":75,"y":200},"end_point":{"x":75,"y":500}},"width":100,"strength":1,"leading_dist":100}]}

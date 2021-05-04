@@ -4,6 +4,7 @@ type VectorPoint = mint::Point2<f32>;
 pub struct ScreenContext {
   pub translation: mint::Point2<f32>,
   pub scale: f32,
+  pub size: (f32, f32)
 }
 
 impl ScreenContext {
@@ -49,7 +50,8 @@ impl Default for ScreenContext {
         x: 0.0,
         y: 0.0,
       },
-      scale: 1.0
+      scale: 1.0,
+      size: (0.0, 0.0)
     }
   }
 }

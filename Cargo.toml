@@ -1,12 +1,21 @@
 [package]
-name = "untitled_game"
+name = "skyship_rust"
 version = "0.1.0"
 authors = ["Skyler Calaman <54462713+Blckbrry-Pi@users.noreply.github.com>"]
 edition = "2018"
+description = "A simple space-themed physics game."
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package.metadata.bundle]
+name = "SkyShip"
+identifier = "dev.skyc.skyship"
+version = "0.0.1"
+resources = ["resources/anton.ttf", "resources/levels.levelData"]
+category = "public.app-category.racing-games"
 
 [dependencies]
 ggez = "0.6.0-rc1"
 mint = "0.5"
 winit = "0.24.0"
+serde = "1.0.59"
+serde_json = "1.0.59"

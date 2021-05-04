@@ -1,22 +1,26 @@
 use ggez::{graphics};
 use ggez::{Context, GameResult};
 
-type Point = mint::Point2<f32>;
+use super::point::Point;
 use super::super::screen_context::ScreenContext;
 
+use serde::Deserialize;
+
+#[derive(Deserialize)]
 pub struct DirectionalLine {
   start_point: Point,
   end_point: Point
 }
 
+#[allow(clippy::float_cmp)]
 impl DirectionalLine {
   pub fn new(
     p_start: &Point,
     p_end: &Point,
   ) -> DirectionalLine {
     DirectionalLine {
-      start_point: p_start.clone(),
-      end_point: p_end.clone(),
+      start_point: *p_start,
+      end_point: *p_end,
     }
   }
 
@@ -144,7 +148,7 @@ impl DirectionalLine {
   ) -> GameResult<()> {
     let mut mesh = graphics::MeshBuilder::new();
     mesh.line(
-      &[screen.point_game_to_screen(self.start_point), screen.point_game_to_screen(self.end_point)],
+      &[screen.point_game_to_screen(self.start_point.into()), screen.point_game_to_screen(self.end_point.into())],
       3.0,
       [1.0, 1.0, 1.0, 1.0].into()
     )?;
@@ -153,7 +157,7 @@ impl DirectionalLine {
   }
 }
 
-
+#[derive(Deserialize)]
 pub struct Zipper {
   line: DirectionalLine,
   width: f32,
@@ -161,6 +165,7 @@ pub struct Zipper {
   pub strength: f32
 }
 
+#[allow(clippy::float_cmp)]
 impl Zipper {
   pub fn new(
     p_start: &Point,
@@ -171,9 +176,9 @@ impl Zipper {
   ) -> Zipper {
     Zipper {
       line: DirectionalLine::new(p_start, p_end),
-      width: width,
-      leading_dist: leading_dist,
-      strength: strength,
+      width,
+      leading_dist,
+      strength,
     }
   }
 

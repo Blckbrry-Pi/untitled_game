@@ -1,10 +1,13 @@
 use ggez::{graphics};
 use ggez::{Context, GameResult};
 
-type Point = mint::Point2<f32>;
+use super::point::Point;
 use super::super::screen_context::ScreenContext;
 use super::super::drawing_helpers::fill_stroke::{Fill, Stroke};
 
+use serde::Deserialize;
+
+#[derive(Deserialize)]
 pub struct Attractor {
   pos: Point,
   field_size: f32,
@@ -15,13 +18,13 @@ pub struct Attractor {
 
 impl Attractor {
   pub fn new(
-    pos: Point,
+    pos: &Point,
     field_radius: f32,
     physical_radius: f32,
     spin_clockwise: bool,
   ) -> Attractor {
     Attractor {
-      pos: pos.clone(),
+      pos: *pos,
       field_size: field_radius,
       phys_size: physical_radius,
       rot_offset: 0.0,
@@ -61,7 +64,7 @@ impl Attractor {
     ctx: &mut Context,
     screen: &ScreenContext,
   ) -> GameResult<()> {
-    let on_screen_point = screen.point_game_to_screen(self.pos);
+    let on_screen_point = screen.point_game_to_screen(self.pos.into());
 
     let circle = graphics::Mesh::new_circle(
       ctx,
@@ -103,8 +106,7 @@ impl Attractor {
       spike_stroke, 
       spike_fill,
       on_screen_point,
-      self.phys_size * 2.0 / 3.0,
-      self.phys_size,
+      (self.phys_size * 2.0 / 3.0, self.phys_size),
       8,
       -self.rot_offset
     )?;
@@ -161,8 +163,7 @@ fn spiky_circle(
   stroke: Stroke,
   fill: Fill,
   point: mint::Point2<f32>,
-  inner_radius: f32,
-  outer_radius: f32,
+  radii: (f32, f32),
   spike_count: u16,
   rotation: f32
 ) -> GameResult<graphics::Mesh> {
@@ -173,8 +174,8 @@ fn spiky_circle(
     for i in 0..spike_count {
       for j in 0..2 {
         let ang = (i as f32 + (j as f32 * 0.5)) / spike_count as f32 * std::f32::consts::TAU + rotation;
-        let x_pos = ang.cos() * [inner_radius, outer_radius][j] + point.x;
-        let y_pos = ang.sin() * [inner_radius, outer_radius][j] + point.y;
+        let x_pos = ang.cos() * [radii.0, radii.1][j] + point.x;
+        let y_pos = ang.sin() * [radii.0, radii.1][j] + point.y;
         points.push(mint::Point2 {x: x_pos, y: y_pos});
       }
     }
